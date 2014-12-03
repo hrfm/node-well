@@ -1,0 +1,28 @@
+{
+    "tsc" : {
+        "default" : {
+            "srcDir"  : "path/to/src",
+            "destDir" : "path/to/dest",
+            "output"  : "output js file name"
+        }
+    },
+    "connect" : {
+        "root"       : "path/to/docroot",
+        "host"       : "localhost",
+        "port"       : "9999",
+        "livereload" : true,
+    },
+    "livereload" : {
+        "watch" : "/**/*.*"
+    },
+    "rsync" : {
+        "ssh"        : true,
+        "src"        : "htdocs",
+        "recursive"  : true,
+        "syncDest"   : true,
+        "delete"     : false,
+        "deleteAll"  : false,
+        "dest"       : "user@host:path/to/dir",
+        "privateKey" : "path/to/key.pem"
+    }
+}
