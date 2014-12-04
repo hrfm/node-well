@@ -18,22 +18,29 @@ function cecho() {
 # Ask.
 
 function ask(){
-	while true; do
-		cecho $yellow "Are you using $1 in this project? (y/n)"
-		read answer
-		case $answer in
-			y)
-				break
-				;;
-			n)
-				set_conf $1 0
-				break
-				;;
-			*)
-            	echo "Cannot understand $answer."
-				;;
-		esac
-	done
+
+	if [ ! -n "`set_conf $1`" ]; then
+
+		while true; do
+			cecho $yellow "Are you using $1 in this project? (y/n)"
+			read answer
+			case $answer in
+				y)
+					break
+					;;
+				n)
+					set_conf $1 0
+					echo "$1 is not used in this project."
+					break
+					;;
+				*)
+	            	echo "Cannot understand $answer."
+					;;
+			esac
+		done
+
+	fi
+
 }
 
 # =========================================================================
