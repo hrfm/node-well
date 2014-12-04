@@ -1,8 +1,15 @@
 {
+    "sass" : {
+        "default" : {
+            "srcDir"  : "path/to/srcDir",
+            "destDir" : "path/to/destDir",
+            "output"  : "output css file name"
+        }
+    },
     "tsc" : {
         "default" : {
-            "srcDir"  : "path/to/src",
-            "destDir" : "path/to/dest",
+            "srcDir"  : "path/to/srcDir",
+            "destDir" : "path/to/destDir",
             "output"  : "output js file name"
         }
     },

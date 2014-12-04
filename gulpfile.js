@@ -1,29 +1,70 @@
 // ------------------------------------------------------------ //
 // --- Modules ---
 
-var gulp         = require('gulp'),
-    gutil        = require('gulp-util'),
-    connect      = require('gulp-connect'),
-    filter       = require('gulp-filter'),
-    plumber      = require('gulp-plumber'),
-    tsc          = require('gulp-tsc'),
-    uglify       = require('gulp-uglifyjs'),
-    watch        = require('gulp-watch'),
-    rsync        = require('rsyncwrapper').rsync,
-    extend       = require('util')._extend;
+var gulp     = require('gulp'),
+    gutil    = require('gulp-util'),
+    connect  = require('gulp-connect'),
+    filter   = require('gulp-filter'),
+    plumber  = require('gulp-plumber'),
+    sass     = require('gulp-ruby-sass'),
+    tsc      = require('gulp-tsc'),
+    uglify   = require('gulp-uglifyjs'),
+    watch    = require('gulp-watch'),
+    rsync    = require('rsyncwrapper').rsync,
+    extend   = require('util')._extend;
 
 var settings;
 
 try{
-    settings = require('./gulpfile.settings.json');
+    settings = require('./conf/gulpfile.settings.json');
 }catch(e){
-    settings = {};
+    throw "gulpfile.settings.json is not found."
 }
-
-var destDir = "htdocs/public/assets";
 
 // ------------------------------------------------------------ //
 // --- Task ---
+
+// ------------ ------------
+// watch
+// ------------ ------------
+
+gulp.task("watch:sass",function(){
+    if( !settings.sass ){
+        throw "No Settings for sass";
+    }
+    var _conf = settings.sass.default;
+    gulp.watch([_conf.srcDir],["scss"]);
+});
+
+gulp.task("watch:ts",function(){
+    if( !settings.tsc ){
+        throw "No Settings for tsc";
+    }
+    var _conf = settings.tsc.default;
+    gulp.watch([_conf.srcDir,"!**/*.d.ts","!**/d.ts"],["tsc"]);
+});
+
+// ------------ ------------
+// sass
+// ------------ ------------
+
+gulp.task("sass",function(){
+
+    if( !settings.sass ){
+        throw "No Settings for tsc";
+    }
+
+    var _conf = settings.sass.default;
+    //var _filter = new filter(["*","!*.css"]);
+
+    return gulp.src([_conf.srcDir+'/**/*.scss'])
+        .pipe(plumber())
+        .pipe(sass({
+
+        }))
+        .pipe(gulp.dest(_conf.destDir));
+
+});
 
 // ------------ ------------
 // tsc
@@ -51,14 +92,6 @@ gulp.task("tsc",function(){
         .pipe(uglify(_conf.output+".min.js",{ outSourceMap : true, basePath : _conf.destDir } ))
         .pipe(gulp.dest(_conf.destDir));
 
-});
-
-gulp.task("tsc:watch",function(){
-    if( !settings.tsc ){
-        throw "No Settings for tsc";
-    }
-    var _conf = settings.tsc.default;
-    gulp.watch([_conf.srcDir,"!**/*.d.ts","!**/d.ts"],["tsc"]);
 });
 
 // ------------ ------------
